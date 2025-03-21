@@ -24,6 +24,10 @@
             stripeKey: "{{config('services.stripe.key')}}"
         }
     </script>
+    <?php
+        use Illuminate\Support\Facades\File;
+        use Illuminate\Support\Facades\App;
+    ?>
     <?php if(isDemo()) { ?>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-152899919-3"></script>
