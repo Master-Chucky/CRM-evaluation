@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Import\UploadService;
+use App\Services\Upload\UploadService;
 use App\Services\Reset\ResetService;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;

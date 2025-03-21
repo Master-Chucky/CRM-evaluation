@@ -1,0 +1,11 @@
+table_name,absences
+external_id,reason,start_at,end_at,user_id,comment
+EXT1234,Maladie,2025-03-21 08:00:00,2025-03-21 17:00:00,1,Absence pour maladie
+EXT5678,Vacances,2025-03-22 09:00:00,2025-03-22 18:00:00,2,Vacances annuelles
+EXT9101,Retard,2025-03-23 10:00:00,2025-03-23 12:00:00,3,Retard pour cause de transport
+
+table_name,activities
+causer_id,causer_type,text,source_type,source_id,properties
+1,App\User,Utilisateur connecté,login,1234,{"ip": "192.168.1.1"}
+2,App\User,Changement de mot de passe,update,5678,{"ip": "192.168.1.2"}
+3,App\User,Ajout de commentaire,comment,9101,{"commentaire": "Très important!"}

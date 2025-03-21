@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Import;
+namespace App\Services\Upload;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
