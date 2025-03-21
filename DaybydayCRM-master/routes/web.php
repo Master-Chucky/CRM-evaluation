@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'DatabaseController@index')->name('database.index');
         Route::post('/reset', 'DatabaseController@reset')->name('database.reset');
     });
-    Route::resource('databases', 'DatabaseController')->except(['show']);
+    Route::resource('database', 'DatabaseController')->except(['show']);
 
     /**
      * Users
