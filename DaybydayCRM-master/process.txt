@@ -1,0 +1,13 @@
+installation de php7.3.9
+installation de composer compatible avec php7.3.9
+composer install
+php artisan migrate:fresh --seed && php artisan db:seed --class=DummyDatabaseSeeder
+php artisan key:generate
+nvm install 12
+nvm use 12
+npm install
+npm run dev
+
+php artisan database:drop-all
+
+composer require maatwebsite/excel
