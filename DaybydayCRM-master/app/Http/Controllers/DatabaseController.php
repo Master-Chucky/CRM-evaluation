@@ -12,7 +12,7 @@ class DatabaseController extends Controller {
         return view('database.index');
     }
 
-    public function resetWithTruncate()
+    public function reset()
     {
         ResetService::resetDatabase();
         Session::flash('flash_message', __('Base de données réinitialisée avec succès (truncate)'));
