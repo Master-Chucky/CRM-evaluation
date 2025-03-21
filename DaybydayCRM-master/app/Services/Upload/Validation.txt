@@ -1,0 +1,723 @@
+if (!empty($groupedData['absences'])) {
+    self::importAbsences($groupedData['absences']);
+}
+
+private static function importAbsences($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'external_id' => 'required|string|unique:absences,external_id',
+            'reason'      => 'required|string|max:255',
+            'start_at'    => 'required|date|before_or_equal:end_at',
+            'end_at'      => 'required|date|after_or_equal:start_at',
+            'user_id'     => 'required|exists:users,id',
+            'comment'     => 'nullable|string|max:500',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Absences) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Absence::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['activities'])) {
+    self::importActivities($groupedData['activities']);
+}
+
+private static function importActivities($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'causer_id'   => 'required|integer|exists:users,id',
+            'causer_type' => 'required|string',
+            'text'        => 'required|string|max:255',
+            'source_type' => 'required|string',
+            'source_id'   => 'required|integer',
+            'properties'  => 'nullable|json',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Activities) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Activity::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['appointments'])) {
+    self::importAppointments($groupedData['appointments']);
+}
+
+private static function importAppointments($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'user_id'      => 'required|exists:users,id',
+            'source_id'    => 'required|integer',
+            'source_type'  => 'required|string',
+            'start_at'     => 'required|date|before_or_equal:end_at',
+            'end_at'       => 'required|date|after_or_equal:start_at',
+            'external_id'  => 'required|string|unique:appointments,external_id',
+            'title'        => 'required|string|max:255',
+            'description'  => 'nullable|string|max:500',
+            'color'        => 'nullable|string|max:20',
+            'client_id'    => 'nullable|exists:clients,id',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Appointments) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Appointment::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['business_hours'])) {
+    self::importBusinessHours($groupedData['business_hours']);
+}
+
+private static function importBusinessHours($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'settings_id' => 'required|exists:settings,id',
+            'open_time'   => 'required|date_format:H:i:s',
+            'close_time'  => 'required|date_format:H:i:s|after:open_time',
+            'day'         => 'required|integer|between:0,6', // 0 = Dimanche, 6 = Samedi
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (BusinessHours) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        BusinessHour::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['clients'])) {
+    self::importClients($groupedData['clients']);
+}
+
+private static function importClients($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'external_id'      => 'required|string|unique:clients,external_id',
+            'name'             => 'required|string|max:255',
+            'company_name'     => 'nullable|string|max:255',
+            'vat'              => 'nullable|string|max:50',
+            'email'            => 'nullable|email|max:255|unique:clients,email',
+            'address'          => 'nullable|string|max:500',
+            'zipcode'          => 'nullable|string|max:20',
+            'city'             => 'nullable|string|max:100',
+            'primary_number'   => 'nullable|string|max:50',
+            'secondary_number' => 'nullable|string|max:50',
+            'industry_id'      => 'nullable|integer|exists:industries,id',
+            'company_type'     => 'nullable|string|max:100',
+            'user_id'          => 'required|integer|exists:users,id',
+            'client_number'    => 'nullable|string|max:100|unique:clients,client_number',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Clients) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Client::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['comments'])) {
+    self::importComments($groupedData['comments']);
+}
+
+private static function importComments($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'description' => 'required|string|max:1000',
+            'task_id'     => 'required|integer|exists:tasks,id',
+            'user_id'     => 'required|integer|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Comments) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Comment::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['contacts'])) {
+    self::importContacts($groupedData['contacts']);
+}
+
+private static function importContacts($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'external_id'      => 'required|string|unique:contacts,external_id',
+            'name'             => 'required|string|max:255',
+            'email'            => 'required|email|unique:contacts,email',
+            'primary_number'   => 'nullable|string|max:20',
+            'secondary_number' => 'nullable|string|max:20',
+            'client_id'        => 'required|integer|exists:clients,id',
+            'is_primary'       => 'required|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Contacts) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Contact::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['departments'])) {
+    self::importDepartments($groupedData['departments']);
+}
+
+private static function importDepartments($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'external_id'  => 'required|string|unique:departments,external_id',
+            'name'         => 'required|string|max:255',
+            'description'  => 'nullable|string|max:500',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Departments) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Department::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['documents'])) {
+    self::importDocuments($groupedData['documents']);
+}
+
+private static function importDocuments($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'external_id'       => 'required|string|unique:documents,external_id',
+            'name'              => 'required|string|max:255',
+            'size'              => 'required|integer|min:1',
+            'path'              => 'required|string|max:500',
+            'original_filename' => 'required|string|max:255',
+            'client_id'         => 'nullable|exists:clients,id',
+            'mime'              => 'required|string|max:255',
+            'integration_id'    => 'nullable|integer',
+            'integration_type'  => 'nullable|string|max:255',
+            'source_type'       => 'nullable|string|max:255',
+            'source_id'         => 'nullable|integer',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Documents) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Document::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['integrations'])) {
+    self::importIntegrations($groupedData['integrations']);
+}
+
+private static function importIntegrations($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'name'          => 'required|string|max:255',
+            'client_id'     => 'nullable|integer|exists:clients,id',
+            'client_secret' => 'nullable|string|max:255',
+            'api_key'       => 'nullable|string|max:255',
+            'org_id'        => 'nullable|string|max:255',
+            'api_type'      => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Integrations) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Integration::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['invoices'])) {
+    self::importInvoices($groupedData['invoices']);
+}
+
+private static function importInvoices($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'status'                 => 'required|string|max:255',
+            'sent_at'                => 'nullable|date',
+            'due_at'                 => 'nullable|date',
+            'client_id'              => 'required|exists:clients,id',
+            'integration_invoice_id'=> 'nullable|string|max:255',
+            'integration_type'      => 'nullable|string|max:255',
+            'source_id'             => 'nullable|integer',
+            'source_type'           => 'nullable|string|max:255',
+            'external_id'           => 'required|string|max:255|unique:invoices,external_id',
+            'offer_id'              => 'nullable|exists:offers,id',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Invoices) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Invoice::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['invoice_lines'])) {
+    self::importInvoiceLines($groupedData['invoice_lines']);
+}
+
+private static function importInvoiceLines($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'external_id' => 'required|string|max:255|unique:invoice_lines,external_id',
+            'type'         => 'required|string|max:255',
+            'quantity'     => 'required|numeric',
+            'title'        => 'required|string|max:255',
+            'comment'      => 'nullable|string|max:500',
+            'price'        => 'required|numeric',
+            'invoice_id'   => 'required|exists:invoices,id',
+            'product_id'   => 'nullable|exists:products,id',
+            'offer_id'     => 'nullable|exists:offers,id',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (InvoiceLines) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        InvoiceLine::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['mails'])) {
+    self::importMails($groupedData['mails']);
+}
+
+private static function importMails($data)
+{
+    foreach ($data as $row) {
+        // Valider les données avant l'insertion
+        $validator = Validator::make($row, [
+            'subject'    => 'required|string|max:255',
+            'body'       => 'nullable|string|max:1000',
+            'template'   => 'nullable|string|max:255',
+            'email'      => 'required|email|max:255',
+            'user_id'    => 'required|exists:users,id',
+            'send_at'    => 'nullable|date',
+            'sent_at'    => 'nullable|date',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Mails) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer l'email dans la base de données
+        Mail::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['offers'])) {
+    self::importOffers($groupedData['offers']);
+}
+
+private static function importOffers($data)
+{
+    foreach ($data as $row) {
+        // Valider les données avant l'insertion
+        $validator = Validator::make($row, [
+            'sent_at'     => 'nullable|date',
+            'status'      => 'required|string|in:sent,won,lost',  // Exemple de statut possible
+            'due_at'      => 'nullable|date',
+            'client_id'   => 'required|exists:clients,id',
+            'source_id'   => 'required|integer',
+            'source_type' => 'required|string',
+            'external_id' => 'required|string|unique:offers,external_id',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Offers) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer l'offre dans la base de données
+        Offer::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['payments'])) {
+    self::importPayments($groupedData['payments']);
+}
+
+private static function importPayments($data)
+{
+    foreach ($data as $row) {
+        // Validation des données de paiement
+        $validator = Validator::make($row, [
+            'description'             => 'nullable|string',
+            'amount'                  => 'required|numeric',
+            'payment_source'          => 'nullable|string',
+            'payment_date'            => 'required|date',
+            'integration_payment_id' => 'nullable|string',
+            'integration_type'       => 'nullable|string',
+            'invoice_id'              => 'required|exists:invoices,id',  // Lier à une facture existante
+            'external_id'             => 'required|string|unique:payments,external_id', // Assurer l'unicité
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Payments) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer un paiement dans la base de données
+        Payment::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['permissions'])) {
+    self::importPermissions($groupedData['permissions']);
+}
+
+private static function importPermissions($data)
+{
+    foreach ($data as $row) {
+        // Validation des données de permission
+        $validator = Validator::make($row, [
+            'display_name' => 'required|string|max:255',
+            'name'         => 'required|string|max:255|unique:permissions,name', // Assurer l'unicité
+            'description'  => 'nullable|string',
+            'grouping'     => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Permissions) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer une permission dans la base de données
+        Permission::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['permission_roles'])) {
+    self::importPermissionRoles($groupedData['permission_roles']);
+}
+
+private static function importPermissionRoles($data)
+{
+    foreach ($data as $row) {
+        // Validation des données de permission_role
+        $validator = Validator::make($row, [
+            'permission_id' => 'required|exists:permissions,id',
+            'role_id'       => 'required|exists:roles,id',  // Assurer que les ID de rôle existent
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (PermissionRole) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer une relation permission_role dans la base de données
+        PermissionRole::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['products'])) {
+    self::importProducts($groupedData['products']);
+}
+
+private static function importProducts($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'external_id' => 'required|string|unique:products,external_id',
+            'price'       => 'required|numeric',  // Assurer que le prix est un nombre
+            'name'        => 'required|string|max:255',  // Nom du produit requis
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Product) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer un produit dans la base de données
+        Product::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['projects'])) {
+    self::importProjects($groupedData['projects']);
+}
+
+private static function importProjects($data)
+{
+    foreach ($data as $row) {
+        // Validation des données des projets
+        $validator = Validator::make($row, [
+            'external_id'    => 'required|string|unique:projects,external_id',
+            'title'          => 'required|string|max:255',
+            'status_id'      => 'required|exists:statuses,id',  // Assurer que le status_id existe dans la table Status
+            'user_assigned_id' => 'required|exists:users,id',  // Assurer que l'utilisateur assigné existe
+            'client_id'      => 'required|exists:clients,id',  // Assurer que le client existe
+            'deadline'       => 'required|date',  // Date de deadline valide
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Project) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer un projet dans la base de données
+        Project::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['roles'])) {
+    self::importRoles($groupedData['roles']);
+}
+
+private static function importRoles($data)
+{
+    foreach ($data as $row) {
+        // Validation des données des rôles
+        $validator = Validator::make($row, [
+            'external_id'    => 'required|string|unique:roles,external_id',  // L'ID externe doit être unique
+            'name'            => 'required|string|unique:roles,name',  // Le nom du rôle doit être unique
+            'display_name'    => 'required|string|max:255',  // Le nom affiché est requis
+            'description'     => 'nullable|string|max:500',  // Description est optionnelle
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Role) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer un rôle dans la base de données
+        Role::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['role_users'])) {
+    self::importRoleUsers($groupedData['role_users']);
+}
+
+private static function importRoleUsers($data)
+{
+    foreach ($data as $row) {
+        // Validation des données de role_user
+        $validator = Validator::make($row, [
+            'role_id' => 'required|exists:roles,id',  // Le role_id doit exister dans la table roles
+            'user_id' => 'required|exists:users,id',  // Le user_id doit exister dans la table users
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (RoleUser) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer une relation role_user dans la base de données
+        RoleUser::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['leads'])) {
+    self::importLeads($groupedData['leads']);
+}
+
+private static function importLeads($data)
+{
+    foreach ($data as $row) {
+        $validator = Validator::make($row, [
+            'external_id'    => 'required|string|max:255|unique:leads,external_id',
+            'title'          => 'required|string|max:255',
+            'description'    => 'nullable|string|max:1000',
+            'status_id'      => 'required|exists:statuses,id',
+            'user_assigned_id' => 'nullable|exists:users,id',
+            'user_created_id' => 'required|exists:users,id',
+            'client_id'      => 'required|exists:clients,id',
+            'result'         => 'nullable|string|max:500',
+            'deadline'       => 'nullable|date',
+            'invoice_id'     => 'nullable|exists:invoices,id',
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Leads) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        Lead::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['settings'])) {
+    self::importSettings($groupedData['settings']);
+}
+
+private static function importSettings($data)
+{
+    foreach ($data as $row) {
+        // Validation des données de setting
+        $validator = Validator::make($row, [
+            'client_number' => 'required|string|max:255',
+            'invoice_number' => 'required|string|max:255',
+            'company'        => 'required|string|max:255',
+            'country'        => 'required|string|max:255',
+            'currency'       => 'required|string|max:10',
+            'vat'             => 'required|numeric',
+            'language'       => 'required|string|max:5',
+            'user_id'        => 'required|exists:users,id',  // Assurer que le user_id existe
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Setting) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer un paramètre setting dans la base de données
+        Setting::create($row);
+    }
+} 
+
+==============================oOo==============================
+
+if (!empty($groupedData['statuses'])) {
+    self::importStatuses($groupedData['statuses']);
+}
+
+private static function importStatuses($data)
+{
+    foreach ($data as $row) {
+        // Validation des données de status
+        $validator = Validator::make($row, [
+
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Status) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer un statut dans la base de données
+        Status::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['tasks'])) {
+    self::importTasks($groupedData['tasks']);
+}
+
+private static function importTasks($data)
+{
+    foreach ($data as $row) {
+        // Validation des données de task
+        $validator = Validator::make($row, [
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string|max:500',
+            'external_id' => 'required|string|unique:tasks,external_id',
+            'status_id'   => 'required|exists:statuses,id', // Assurer que le status_id existe dans la table statuses
+            'user_assigned_id' => 'nullable|exists:users,id', // Assurer que le user_id existe
+            'user_created_id'  => 'nullable|exists:users,id', // Assurer que le user_id existe
+            'client_id'   => 'nullable|exists:clients,id', // Assurer que le client_id existe
+            'project_id'  => 'nullable|exists:projects,id', // Assurer que le project_id existe
+            'deadline'    => 'nullable|date', // Assurer que la date de deadline est valide
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (Task) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer une tâche dans la base de données
+        Task::create($row);
+    }
+}
+
+==============================oOo==============================
+
+if (!empty($groupedData['users'])) {
+    self::importUsers($groupedData['users']);
+}
+
+private static function importUsers($data)
+{
+    foreach ($data as $row) {
+        // Validation des données de l'utilisateur
+        $validator = Validator::make($row, [
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|email|unique:users,email', // Assurer que l'email est unique
+            'password'      => 'required|string|min:6', // Mot de passe doit être d'au moins 6 caractères
+            'external_id'   => 'required|string|unique:users,external_id', // Assurer que l'external_id est unique
+            'address'       => 'nullable|string|max:500',
+            'primary_number'=> 'nullable|string|max:20',
+            'secondary_number' => 'nullable|string|max:20',
+            'image_path'    => 'nullable|string|max:255',
+            'language'      => 'nullable|string|max:2', // Si on suppose que la langue est un code de 2 caractères (ex: "en")
+        ]);
+
+        if ($validator->fails()) {
+            throw new Exception("Erreur de validation (User) : " . implode(', ', $validator->errors()->all()));
+        }
+
+        // Créer un utilisateur dans la base de données
+        User::create([
+            'name'          => $row['name'],
+            'email'         => $row['email'],
+            'password'      => bcrypt($row['password']), // Hashage du mot de passe
+            'external_id'   => $row['external_id'],
+            'address'       => $row['address'] ?? null,
+            'primary_number'=> $row['primary_number'] ?? null,
+            'secondary_number' => $row['secondary_number'] ?? null,
+            'image_path'    => $row['image_path'] ?? null,
+            'language'      => $row['language'] ?? 'en', // Valeur par défaut "en" si pas précisé
+        ]);
+    }
+}
+
+==============================oOo==============================

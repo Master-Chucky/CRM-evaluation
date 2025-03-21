@@ -12,6 +12,12 @@
             </div>
         @endif
 
+        @if(session('import_message'))
+            <div class="alert alert-info">
+                {{ session('import_message') }}
+            </div>
+        @endif
+
         @if(session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
@@ -24,6 +30,15 @@
         </form>
 
         <br>
+
+        <form action="{{ route('database.importCsv') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group">
+                <label for="csvFile">Importer le fichier CSV</label>
+                <input type="file" name="csv_file" id="csvFile" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Importer CSV</button>
+        </form>
 
     </div>
 @endsection

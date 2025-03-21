@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'database'], function () {
         Route::get('/', 'DatabaseController@index')->name('database.index');
         Route::post('/reset', 'DatabaseController@reset')->name('database.reset');
+        Route::post('/import-csv', 'DatabaseController@importFromCsv')->name('database.importCsv');
     });
     Route::resource('database', 'DatabaseController')->except(['show']);
 
