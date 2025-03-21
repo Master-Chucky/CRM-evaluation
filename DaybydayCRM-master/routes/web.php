@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -9,6 +12,7 @@
 | to using a Closure or controller method. Build something great!
 |
 */
+
 Route::auth();
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::group(['middleware' => ['auth']], function () {
@@ -18,6 +22,15 @@ Route::group(['middleware' => ['auth']], function () {
      */
     Route::get('/', 'PagesController@dashboard');
     Route::get('dashboard', 'PagesController@dashboard')->name('dashboard');
+
+    /**
+     * Database Service
+     */
+    Route::group(['prefix' => 'database'], function () {
+        Route::get('/', 'DatabaseController@index')->name('database.index');
+        Route::post('/reset', 'DatabaseController@reset')->name('database.reset');
+    });
+    Route::resource('database', 'DatabaseController')->except(['show']);
 
     /**
      * Users
