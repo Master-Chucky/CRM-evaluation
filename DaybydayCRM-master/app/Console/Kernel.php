@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        \App\Console\Commands\DropAllTables::class,
         Commands\Inspire::class,
         Commands\Test::class
     ];
