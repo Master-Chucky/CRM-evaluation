@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{ asset(elixir('css/bootstrap-select.min.css')) }}">
     <link href="{{ URL::asset('css/summernote.css') }}" rel="stylesheet">
     <link rel="shortcut icon" href="{{{ asset('images/favicon.png') }}}">
+    <link href="{{ asset('css/generation.css') }}" rel="stylesheet">
     <script>
         var DayByDay =  {
             csrfToken: "{{csrf_token()}}",

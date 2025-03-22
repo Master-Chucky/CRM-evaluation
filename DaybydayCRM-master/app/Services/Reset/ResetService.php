@@ -18,7 +18,6 @@ class ResetService
             'projects',
             'tasks',
             'contacts',
-            'industries',
             'appointments',
             'clients',
             'offers',
