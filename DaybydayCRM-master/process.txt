@@ -11,3 +11,24 @@ npm run dev
 php artisan database:drop-all
 
 composer require maatwebsite/excel
+
+composer require laravel/passport:^9.0 --with-all-dependencies
+
+php artisan vendor:publish --provider="Laravel\Passport\PassportServiceProvider"
+
+php artisan migrate
+
+php artisan passport:install
+
+composer require barryvdh/laravel-cors
+
+config/core : 
+return [
+    'paths' => ['api/*'],
+    'allowed_methods' => ['*'],
+    'allowed_origins' => ['http://localhost:8080'], // votre domaine/port Spring Boot
+    'allowed_headers' => ['Content-Type', 'X-Requested-With'],
+    'exposed_headers' => [],
+    'max_age' => 0,
+    'supports_credentials' => false,
+];

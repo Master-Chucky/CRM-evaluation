@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +20,5 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
         Route::get('users', ['uses' => 'UserController@index']);
     });
 });
+
+Route::post('/login', [AuthController::class, 'login']);
