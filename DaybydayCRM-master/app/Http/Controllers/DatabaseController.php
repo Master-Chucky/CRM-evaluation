@@ -6,6 +6,7 @@ use App\Services\Upload\UploadService;
 use App\Services\Reset\ResetService;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseController extends Controller {
 
@@ -36,6 +37,25 @@ class DatabaseController extends Controller {
         }
     
         return redirect()->route('database.index');
+    }
+
+    public function generate(Request $request)
+    {
+         
+        $data = $request->input('tables', []);
+ 
+        foreach ($data as $table => $count) {
+             
+            if ($count > 0) { 
+                for ($i = 0; $i < $count; $i++) {
+                    Artisan::call('db:seed', [
+                        '--class' => ucfirst(camel_case($table)) . 'DummyTableSeeder'
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Les données ont été générées avec succès !');
     }
 
 }

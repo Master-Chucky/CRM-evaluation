@@ -1,0 +1,55 @@
+.container {
+    margin-top: 30px;
+}
+
+.alert {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+form button {
+    margin-top: 10px;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+}
+
+.reset-form, .import-form {
+    margin-bottom: 30px;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-body {
+    margin-top: 20px;
+    width: 50%;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.form-group {
+    width: 100%;
+}
+
+input {
+    padding: 10px 12px;
+}
