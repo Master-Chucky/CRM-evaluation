@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\InvoiceLineController;
 use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\ProjetController;
+use App\Http\Controllers\Api\StatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ClientController;
@@ -72,4 +73,9 @@ Route::prefix('payment')->group(function () {
 Route::prefix('invoice-line')->group(function () {
     Route::get('/', [InvoiceLineController::class, 'data']);
     Route::get('/nb', [InvoiceLineController::class, 'nbdata']);
+});
+
+// Status
+Route::prefix('status')->group(function () {
+    Route::get('/', [StatusController::class, 'data']);
 });
