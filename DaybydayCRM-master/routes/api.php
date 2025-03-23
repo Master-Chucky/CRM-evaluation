@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\Api\InvoiceLineController;
 use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\ProjetController;
 use Illuminate\Http\Request;
@@ -65,4 +66,10 @@ Route::prefix('payment')->group(function () {
     Route::get('/', [PaymentController::class, 'data']);
     Route::get('/nb', [PaymentController::class, 'nbdata']);
     Route::get('/chart', [PaymentController::class,'monthlyRevenueChart']);
+});
+
+// Invoice Line
+Route::prefix('invoice-line')->group(function () {
+    Route::get('/', [InvoiceLineController::class, 'data']);
+    Route::get('/nb', [InvoiceLineController::class, 'nbdata']);
 });
