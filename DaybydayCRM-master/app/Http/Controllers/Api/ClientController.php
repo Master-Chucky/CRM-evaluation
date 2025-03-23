@@ -10,9 +10,7 @@ class ClientController extends Controller
 {
     public function data(Request $request)
     {
-         
         $perPage = $request->query('per_page', 10);
-
         return response()->json(Client::paginate($perPage));
     }
 

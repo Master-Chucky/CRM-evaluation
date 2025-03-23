@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProjetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ClientController;
@@ -25,14 +26,21 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-// Task
-Route::prefix('task')->group(function () {
-    Route::get('/', [TaskController::class, 'data']);
-    Route::get('/nb', [TaskController::class, 'nbdata']);
-});
-
 // Client
 Route::prefix('client')->group(function () {
     Route::get('/', [ClientController::class, 'data']);
     Route::get('/nb', [ClientController::class, 'nbdata']);
+});
+
+// Project Routes
+Route::prefix('project')->group(function () {
+    Route::get('/', [ProjetController::class, 'data']);
+    Route::get('/nb', [ProjetController::class, 'nbdata']);
+    Route::get('/chart', [ProjetController::class, 'getProjectCountByStatus']);  
+});
+
+// Task
+Route::prefix('task')->group(function () {
+    Route::get('/', [TaskController::class, 'data']);
+    Route::get('/nb', [TaskController::class, 'nbdata']);
 });
