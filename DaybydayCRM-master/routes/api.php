@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\ProjetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\TaskController;
 
 /*
@@ -32,7 +35,7 @@ Route::prefix('client')->group(function () {
     Route::get('/nb', [ClientController::class, 'nbdata']);
 });
 
-// Project Routes
+// Project
 Route::prefix('project')->group(function () {
     Route::get('/', [ProjetController::class, 'data']);
     Route::get('/nb', [ProjetController::class, 'nbdata']);
@@ -43,4 +46,23 @@ Route::prefix('project')->group(function () {
 Route::prefix('task')->group(function () {
     Route::get('/', [TaskController::class, 'data']);
     Route::get('/nb', [TaskController::class, 'nbdata']);
+});
+
+// Offer Routes
+Route::prefix('offer')->group(function () {
+    Route::get('/', [OfferController::class, 'data']);
+    Route::get('/nb', [OfferController::class, 'nbdata']);
+});
+
+// Invoice
+Route::prefix('invoice')->group(function () {
+    Route::get('/', [InvoiceController::class, 'data']);
+    Route::get('/nb', [InvoiceController::class, 'nbdata']);
+});
+
+// Payment
+Route::prefix('payment')->group(function () {
+    Route::get('/', [PaymentController::class, 'data']);
+    Route::get('/nb', [PaymentController::class, 'nbdata']);
+    Route::get('/chart', [PaymentController::class,'monthlyRevenueChart']);
 });
