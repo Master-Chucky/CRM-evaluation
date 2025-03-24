@@ -60,13 +60,17 @@ Route::prefix('offer')->group(function () {
 Route::prefix('invoice')->group(function () {
     Route::get('/', [InvoiceController::class, 'data']);
     Route::get('/nb', [InvoiceController::class, 'nbdata']);
+    Route::get('/chart/{annee?}/{mois?}', [InvoiceController::class, 'invoicePaymentSummary']);
 });
 
 // Payment
 Route::prefix('payment')->group(function () {
     Route::get('/', [PaymentController::class, 'data']);
     Route::get('/nb', [PaymentController::class, 'nbdata']);
+    Route::get('/sum', [PaymentController::class, 'sumpayment']);
     Route::get('/chart', [PaymentController::class,'monthlyRevenueChart']);
+    Route::post('/update/{id}', [PaymentController::class, 'updateAmount']);
+    Route::get('/delete/{id}', [PaymentController::class, 'deletePayment']);
 });
 
 // Invoice Line
