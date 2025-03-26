@@ -61,7 +61,7 @@ class GenerateInvoiceStatus
 
     public function isPaid(): bool
     {
-        return $this->price->getAmount() === $this->sum;
+        return $this->price->getAmount() == $this->sum;
     }
 
     public function isUnPaid(): bool

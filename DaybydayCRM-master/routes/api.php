@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\InvoiceLineController;
 use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\ProjetController;
 use App\Http\Controllers\Api\StatusController;
+use App\Http\Controllers\Api\ConfigurationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ClientController;
@@ -30,6 +31,7 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
 });
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
 
 // Client
 Route::prefix('client')->group(function () {
@@ -83,3 +85,5 @@ Route::prefix('invoice-line')->group(function () {
 Route::prefix('status')->group(function () {
     Route::get('/', [StatusController::class, 'data']);
 });
+
+Route::post('/configuration', [ConfigurationController::class, 'insert']);

@@ -16,6 +16,7 @@ use App\Models\Payment;
 use App\Models\Setting;
 use App\Models\Integration;
 use App\Models\InvoiceLine;
+use App\Models\Configuration;
 use App\Enums\InvoiceStatus;
 use App\Enums\OfferStatus;
 use App\Enums\PaymentSource;
@@ -78,6 +79,7 @@ class InvoicesController extends Controller
 
         $invoiceCalculator = new InvoiceCalculator($invoice);
         $totalPrice = $invoiceCalculator->getTotalPrice();
+        $totalPrice2 = $invoiceCalculator->getTotalPrice2();
         $subPrice = $invoiceCalculator->getSubTotal();
         $vatPrice = $invoiceCalculator->getVatTotal();
         $amountDue = $invoiceCalculator->getAmountDue();
@@ -87,6 +89,7 @@ class InvoicesController extends Controller
             ->withApiconnected($apiConnected)
             ->withContacts($invoiceContacts)
             ->withfinalPrice(app(MoneyConverter::class, ['money' => $totalPrice])->format())
+            ->withfinalPrice2(app(MoneyConverter::class, ['money' => $totalPrice2])->format())
             ->withsubPrice(app(MoneyConverter::class, ['money' => $subPrice])->format())
             ->withVatPrice(app(MoneyConverter::class, ['money' => $vatPrice])->format())
             ->withAmountDueFormatted(app(MoneyConverter::class, ['money' => $amountDue])->format())
@@ -96,7 +99,6 @@ class InvoicesController extends Controller
             ->withSource($invoice->source)
             ->withCompanyName(Setting::first()->company);
     }
-
 
     /**
      * Update the sent status
@@ -115,6 +117,12 @@ class InvoicesController extends Controller
         if ($invoice->isSent()) {
             session()->flash('flash_message_warning', __('Invoice already sent'));
             return redirect()->route('invoices.show', $external_id);
+        }
+
+        $applyDiscount=$request->has('applyDiscount') && $request->applyDiscount==1;
+        if($applyDiscount){
+            $discountPercentage=Configuration::getRemiseGlobale();
+            $invoice->remise=$discountPercentage;
         }
 
         $result = $invoice->invoice($request->invoiceContact);
