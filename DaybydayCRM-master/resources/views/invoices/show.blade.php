@@ -1,7 +1,14 @@
 @extends('layouts.master')
-
 @section('content')
     <div class="row">
+    @if (session('error_message'))
+    <div class="error-message">
+        <strong>Erreur :</strong>
+        <span>{{ session('error_message') }}</span>
+        <button type="button" class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>
+    </div>
+@endif
+
         <div class="col-md-7">
             <div class="tablet">
                 <div class="tablet__head">
@@ -84,10 +91,22 @@
                                     </div>
                                 </div>
                             </div>
-                        <!-- Total price--->
+                            
                             <div class="tablet__item" style="padding: 0;">
                                 <div class="tablet__item__info">
-                                    <span class="final-price">@lang('Total')</span>
+                                    <span class="final-price">@lang('Total sans remise')</span>
+                                </div>
+                                <div class="tablet__item__toolbar">
+                                    <div class="dropdown dropdown-inline">
+                                        <span class="final-price">{{$finalPrice2}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Total price--->
+                            <div class="tablet__item" style="padding: 0;">
+                                <div class="tablet__item__info">
+                                    <span class="final-price">@lang('Total avec remise')</span>
                                 </div>
                                 <div class="tablet__item__toolbar">
                                     <div class="dropdown dropdown-inline">
@@ -248,6 +267,13 @@
 
                     <textarea name="message" id="" rows="13" class="form-control">@lang("Dear :name\n\nThank you, for being a customer at :company\n\nHere is you Invoice on :price\n\nClick the link below to download the invoice\n\n[link-to-pdf]\n\nRegards\n---\n:company", ["name" => $invoice->client->primaryContact->name, "company" => $companyName, "price" => $finalPrice])</textarea>
                 </div>
+                <div class="form-group">
+                    <label for="applyDiscount">
+                        <input type="hidden" name="applyDiscount" value="0">
+                        <input type="checkbox" name="applyDiscount" id="applyDiscount" value="1">
+                        @lang('Appliquer remise')
+                    </label>
+                </div>
                 <input type="submit" value="{{__('Send invoice')}}" class="btn btn-md btn-brand btn-full-width closebtn" id="close-invoice">
             {!! Form::close() !!}
             </div>
@@ -268,6 +294,35 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('css')
+    <style>
+        .error-message {
+            display: flex;
+            align-items: center;
+            background-color: #f8d7da;
+            border: 1px solid #f5c2c7;
+            color: #842029;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            max-width: 100%;
+        }
+
+        .error-message strong {
+            margin-right: 8px;
+        }
+
+        .error-message .close-btn {
+            margin-left: auto;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #842029;
+        }
+    </style>
 @endsection
 
 @push('scripts')

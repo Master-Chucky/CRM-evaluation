@@ -1,0 +1,21 @@
+project_title
+client_name
+task_title
+lead_title
+type
+produit
+prix
+quantite
+
+INSERT INTO users
+	( id, external_id, name, email, password, address, primary_number, secondary_number, image_path, remember_token, language, deleted_at, created_at, updated_at) 
+VALUES
+	( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
+
+INSERT INTO daybyday.projects
+	( id, external_id, title, description, status_id, user_assigned_id, user_created_id, client_id, invoice_id, deadline, deleted_at, created_at, updated_at) 
+VALUES 
+	( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
+
+Amorona projet :
+	-mamorona 
